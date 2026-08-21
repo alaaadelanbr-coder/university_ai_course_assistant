@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>University Course & Exam Assistant</title>
+
+
+    <style>
+
+        /* =========================================
+           GENERAL
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+
+            min-height: 100vh;
+
+            color: #1f2937;
+        }
+
+
+        /* =========================================
+           MAIN APP
+        ========================================= */
+
+        .app-container {
+
+            width: 100%;
+
+            max-width: 1100px;
+
+            height: 95vh;
+
+            margin: 2.5vh auto;
+
+            background: white;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.08);
+
+            display: flex;
+
+            flex-direction: column;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .header {
+
+            padding: 22px 30px;
+
+            background: #111827;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        .header-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .logo {
+
+            width: 50px;
+
+            height: 50px;
+
+            border-radius: 12px;
+
+            background: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+
+        .header h1 {
+
+            font-size: 20px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .header p {
+
+            font-size: 13px;
+
+            color: #cbd5e1;
+        }
+
+
+        .status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            font-size: 13px;
+
+            color: #bbf7d0;
+        }
+
+
+        .status-dot {
+
+            width: 9px;
+
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+        }
+
+
+        /* =========================================
+           QUICK QUESTIONS
+        ========================================= */
+
+        .quick-section {
+
+            padding: 15px 25px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            background: #fafafa;
+        }
+
+
+        .quick-title {
+
+            font-size: 13px;
+
+            color: #6b7280;
+
+            margin-bottom: 10px;
+        }
+
+
+        .quick-buttons {
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .quick-btn {
+
+            border: 1px solid #d1d5db;
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 8px 13px;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            color: #374151;
+        }
+
+
+        .quick-btn:hover {
+
+            background: #eff6ff;
+
+            border-color: #2563eb;
+
+            color: #2563eb;
+        }
+
+
+        /* =========================================
+           CHAT CONTAINER
+        ========================================= */
+
+        .chat-container {
+
+            flex: 1;
+
+            padding: 25px;
+
+            overflow-y: auto;
+
+            background: #f9fafb;
+        }
+
+
+        /* =========================================
+           WELCOME
+        ========================================= */
+
+        .welcome {
+
+            text-align: center;
+
+            padding: 40px 20px;
+        }
+
+
+        .welcome-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .welcome h2 {
+
+            font-size: 24px;
+
+            margin-bottom: 10px;
+
+            color: #111827;
+        }
+
+
+        .welcome p {
+
+            max-width: 600px;
+
+            margin: auto;
+
+            color: #6b7280;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           CHAT MESSAGE
+        ========================================= */
+
+        .message {
+
+            display: flex;
+
+            margin-bottom: 18px;
+        }
+
+
+        .message.user {
+
+            justify-content: flex-end;
+        }
+
+
+        .message.assistant {
+
+            justify-content: flex-start;
+        }
+
+
+        .message-content {
+
+            max-width: 75%;
+
+            padding: 13px 16px;
+
+            border-radius: 15px;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+
+            white-space: pre-wrap;
+
+            word-wrap: break-word;
+        }
+
+
+        .user .message-content {
+
+            background: #2563eb;
+
+            color: white;
+
+            border-bottom-right-radius: 4px;
+        }
+
+
+        .assistant .message-content {
+
+            background: white;
+
+            color: #374151;
+
+            border: 1px solid #e5e7eb;
+
+            border-bottom-left-radius: 4px;
+        }
+
+
+        .message-label {
+
+            font-size: 11px;
+
+            margin-bottom: 5px;
+
+            color: #6b7280;
+        }
+
+
+        /* =========================================
+           LOADING
+        ========================================= */
+
+        .loading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 5px;
+        }
+
+
+        .loading span {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #6b7280;
+
+            animation: bounce 1.2s infinite;
+        }
+
+
+        .loading span:nth-child(2) {
+
+            animation-delay: 0.2s;
+        }
+
+
+        .loading span:nth-child(3) {
+
+            animation-delay: 0.4s;
+        }
+
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+
+                transform: translateY(0);
+            }
+
+            40% {
+
+                transform: translateY(-6px);
+            }
+        }
+
+
+        /* =========================================
+           INPUT AREA
+        ========================================= */
+
+        .input-area {
+
+            padding: 18px 25px;
+
+            background: white;
+
+            border-top: 1px solid #e5e7eb;
+        }
+
+
+        .input-wrapper {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            background: #f9fafb;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 14px;
+
+            padding: 8px 10px;
+        }
+
+
+        #questionInput {
+
+            flex: 1;
+
+            border: none;
+
+            outline: none;
+
+            background: transparent;
+
+            font-size: 14px;
+
+            padding: 10px;
+
+            color: #111827;
+        }
+
+
+        #questionInput::placeholder {
+
+            color: #9ca3af;
+        }
+
+
+        #sendButton {
+
+            border: none;
+
+            background: #2563eb;
+
+            color: white;
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            transition: 0.2s;
+        }
+
+
+        #sendButton:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        #sendButton:disabled {
+
+            background: #9ca3af;
+
+            cursor: not-allowed;
+        }
+
+
+        .input-hint {
+
+            text-align: center;
+
+            margin-top: 8px;
+
+            font-size: 11px;
+
+            color: #9ca3af;
+        }
+
+
+        /* =========================================
+           ERROR MESSAGE
+        ========================================= */
+
+        .error-message {
+
+            background: #fef2f2;
+
+            color: #b91c1c;
+
+            border: 1px solid #fecaca;
+
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .app-container {
+
+                width: 100%;
+
+                height: 100vh;
+
+                margin: 0;
+
+                border-radius: 0;
+            }
+
+
+            .header {
+
+                padding: 18px;
+            }
+
+
+            .header h1 {
+
+                font-size: 16px;
+            }
+
+
+            .header p {
+
+                font-size: 11px;
+            }
+
+
+            .status {
+
+                display: none;
+            }
+
+
+            .chat-container {
+
+                padding: 15px;
+            }
+
+
+            .message-content {
+
+                max-width: 88%;
+            }
+
+
+            .quick-section {
+
+                padding: 12px 15px;
+            }
+
+
+            .input-area {
+
+                padding: 12px 15px;
+            }
+
+
+            .welcome h2 {
+
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         MAIN APPLICATION
+    ========================================== -->
+
+    <div class="app-container">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="header">
+
+
+            <div class="header-left">
+
+
+                <div class="logo">
+                    AI
+                </div>
+
+
+                <div>
+
+                    <h1>
+                        University Course & Exam Assistant
+                    </h1>
+
+
+                    <p>
+                        Grounded RAG • GPA • Study Schedule
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="status">
+
+                <div class="status-dot"></div>
+
+                Assistant Online
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =====================================
+             QUICK QUESTIONS
+        ====================================== -->
+
+        <section class="quick-section">
+
+
+            <div class="quick-title">
+                Quick Questions
+            </div>
+
+
+            <div class="quick-buttons">
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuickQuestion('What are the attendance rules?')">
+
+                    Attendance Rules
+
+                </button>
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuickQuestion('What are the exam dates?')">
+
+                    Exam Schedule
+
+                </button>
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuickQuestion('Calculate my GPA')">
+
+                    GPA Calculator
+
+                </button>
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuickQuestion('Generate a study schedule for my upcoming exam')">
+
+                    Study Schedule
+
+                </button>
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuickQuestion('What courses are included in the syllabus?')">
+
+                    Courses
+
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             CHAT AREA
+        ====================================== -->
+
+        <main
+            id="chatContainer"
+            class="chat-container">
+
+
+            <div class="welcome">
+
+
+                <div class="welcome-icon">
+                    🎓
+                </div>
+
+
+                <h2>
+                    Welcome to the Course Assistant
+                </h2>
+
+
+                <p>
+
+                    Ask questions about your university
+                    syllabus, exams, attendance rules,
+                    GPA, or study schedule.
+
+                    The assistant uses grounded course
+                    information to provide reliable answers.
+
+                </p>
+
+
+            </div>
+
+
+        </main>
+
+
+
+        <!-- =====================================
+             INPUT AREA
+        ====================================== -->
+
+        <footer class="input-area">
+
+
+            <div class="input-wrapper">
+
+
+                <input
+                    type="text"
+                    id="questionInput"
+                    placeholder="Ask something about your course..."
+                    autocomplete="off"
+                >
+
+
+                <button
+                    id="sendButton"
+                    onclick="sendQuestion()"
+                    title="Send">
+
+                    ➤
+
+                </button>
+
+
+            </div>
+
+
+            <div class="input-hint">
+
+                Press Enter to send your question
+
+            </div>
+
+
+        </footer>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+
+        /* ========================================
+           1. BACKEND URL
+
+           FastAPI backend runs on port 8000.
+        ======================================== */
+
+        const API_URL =
+            "http://127.0.0.1:8000";
+
+
+        /* ========================================
+           2. GET HTML ELEMENTS
+        ======================================== */
+
+        const questionInput =
+            document.getElementById(
+                "questionInput"
+            );
+
+
+        const sendButton =
+            document.getElementById(
+                "sendButton"
+            );
+
+
+        const chatContainer =
+            document.getElementById(
+                "chatContainer"
+            );
+
+
+        /* ========================================
+           3. ENTER KEY
+        ======================================== */
+
+        questionInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    sendQuestion();
+
+                }
+
+            }
+        );
+
+
+        /* ========================================
+           4. ADD USER MESSAGE
+        ======================================== */
+
+        function addUserMessage(message) {
+
+
+            const messageDiv =
+                document.createElement("div");
+
+
+            messageDiv.className =
+                "message user";
+
+
+            messageDiv.innerHTML = `
+
+                <div>
+
+                    <div class="message-label">
+                        You
+                    </div>
+
+                    <div class="message-content">
+                        ${escapeHTML(message)}
+                    </div>
+
+                </div>
+
+            `;
+
+
+            chatContainer.appendChild(
+                messageDiv
+            );
+
+
+            scrollToBottom();
+
+        }
+
+
+        /* ========================================
+           5. ADD ASSISTANT MESSAGE
+        ======================================== */
+
+        function addAssistantMessage(message) {
+
+
+            const messageDiv =
+                document.createElement("div");
+
+
+            messageDiv.className =
+                "message assistant";
+
+
+            messageDiv.innerHTML = `
+
+                <div>
+
+                    <div class="message-label">
+                        Course Assistant
+                    </div>
+
+                    <div class="message-content">
+                        ${escapeHTML(message)}
+                    </div>
+
+                </div>
+
+            `;
+
+
+            chatContainer.appendChild(
+                messageDiv
+            );
+
+
+            scrollToBottom();
+
+        }
+
+
+        /* ========================================
+           6. ADD ERROR MESSAGE
+        ======================================== */
+
+        function addErrorMessage(message) {
+
+
+            const messageDiv =
+                document.createElement("div");
+
+
+            messageDiv.className =
+                "message assistant";
+
+
+            messageDiv.innerHTML = `
+
+                <div>
+
+                    <div class="message-label">
+                        Course Assistant
+                    </div>
+
+                    <div class="message-content error-message">
+                        ${escapeHTML(message)}
+                    </div>
+
+                </div>
+
+            `;
+
+
+            chatContainer.appendChild(
+                messageDiv
+            );
+
+
+            scrollToBottom();
+
+        }
+
+
+        /* ========================================
+           7. SHOW LOADING MESSAGE
+        ======================================== */
+
+        function showLoading() {
+
+
+            const loadingDiv =
+                document.createElement("div");
+
+
+            loadingDiv.id =
+                "loadingMessage";
+
+
+            loadingDiv.className =
+                "message assistant";
+
+
+            loadingDiv.innerHTML = `
+
+                <div>
+
+                    <div class="message-label">
+                        Course Assistant
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="loading">
+
+                            <span></span>
+
+                            <span></span>
+
+                            <span></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            chatContainer.appendChild(
+                loadingDiv
+            );
+
+
+            scrollToBottom();
+
+        }
+
+
+        /* ========================================
+           8. REMOVE LOADING MESSAGE
+        ======================================== */
+
+        function removeLoading() {
+
+
+            const loadingMessage =
+                document.getElementById(
+                    "loadingMessage"
+                );
+
+
+            if (loadingMessage) {
+
+                loadingMessage.remove();
+
+            }
+
+        }
+
+
+        /* ========================================
+           9. SEND QUESTION TO FASTAPI
+        ======================================== */
+
+        async function sendQuestion() {
+
+
+            const question =
+                questionInput.value.trim();
+
+
+            /* -------------------------------------
+               Don't send empty question
+            ------------------------------------- */
+
+            if (!question) {
+
+                return;
+
+            }
+
+
+            /* -------------------------------------
+               Disable input while waiting
+            ------------------------------------- */
+
+            sendButton.disabled =
+                true;
+
+
+            questionInput.disabled =
+                true;
+
+
+            /* -------------------------------------
+               Remove welcome screen
+            ------------------------------------- */
+
+            const welcome =
+                document.querySelector(
+                    ".welcome"
+                );
+
+
+            if (welcome) {
+
+                welcome.remove();
+
+            }
+
+
+            /* -------------------------------------
+               Show user's question
+            ------------------------------------- */
+
+            addUserMessage(
+                question
+            );
+
+
+            /* -------------------------------------
+               Clear input
+            ------------------------------------- */
+
+            questionInput.value =
+                "";
+
+
+            /* -------------------------------------
+               Show loading
+            ------------------------------------- */
+
+            showLoading();
+
+
+            try {
+
+
+                /* =================================
+                   SEND REQUEST TO FASTAPI
+
+                   Backend endpoint:
+                   POST /chat
+                ================================== */
+
+                const response =
+                    await fetch(
+                        `${API_URL}/chat`,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            /* Backend expects:
+
+                               {
+                                   "question": "..."
+                               }
+
+                            */
+
+                            body:
+                                JSON.stringify({
+
+                                    question:
+                                        question
+
+                                })
+
+                        }
+                    );
+
+
+                /* =================================
+                   CHECK HTTP STATUS
+                ================================== */
+
+                if (!response.ok) {
+
+
+                    let errorMessage =
+                        `Server returned ${response.status}`;
+
+
+                    try {
+
+                        const errorData =
+                            await response.json();
+
+
+                        if (errorData.detail) {
+
+                            errorMessage =
+                                errorData.detail;
+
+                        }
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            "Could not read error response:",
+                            error
+                        );
+
+                    }
+
+
+                    throw new Error(
+                        errorMessage
+                    );
+
+                }
+
+
+                /* =================================
+                   READ JSON RESPONSE
+                ================================== */
+
+                const data =
+                    await response.json();
+
+
+                removeLoading();
+
+
+                /* =================================
+                   GET ANSWER
+
+                   Backend returns:
+
+                   {
+                       "answer": "..."
+                   }
+                ================================== */
+
+                const answer =
+                    data.answer;
+
+
+                if (answer) {
+
+
+                    addAssistantMessage(
+                        answer
+                    );
+
+
+                }
+
+                else {
+
+
+                    addAssistantMessage(
+                        "The server returned a response, but no answer was found."
+                    );
+
+
+                }
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "API Error:",
+                    error
+                );
+
+
+                removeLoading();
+
+
+                addErrorMessage(
+
+                    "Sorry, I could not connect to the assistant server.\n\n" +
+
+                    "Please make sure the FastAPI backend is running on:\n" +
+
+                    "http://127.0.0.1:8000"
+
+                );
+
+            }
+
+
+            /* =================================
+               ENABLE INPUT AGAIN
+            ================================== */
+
+            sendButton.disabled =
+                false;
+
+
+            questionInput.disabled =
+                false;
+
+
+            questionInput.focus();
+
+        }
+
+
+        /* ========================================
+           10. QUICK QUESTION
+        ======================================== */
+
+        function askQuickQuestion(question) {
+
+
+            questionInput.value =
+                question;
+
+
+            sendQuestion();
+
+        }
+
+
+        /* ========================================
+           11. SCROLL CHAT TO BOTTOM
+        ======================================== */
+
+        function scrollToBottom() {
+
+
+            chatContainer.scrollTop =
+                chatContainer.scrollHeight;
+
+        }
+
+
+        /* ========================================
+           12. ESCAPE HTML
+
+           Prevents user text from being
+           interpreted as HTML.
+        ======================================== */
+
+        function escapeHTML(text) {
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.textContent =
+                text;
+
+
+            return div.innerHTML;
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
