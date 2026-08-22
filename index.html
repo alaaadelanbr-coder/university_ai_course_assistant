@@ -694,13 +694,7 @@
                 </button>
 
 
-                <button
-                    class="quick-btn"
-                    onclick="askQuickQuestion('What are the exam dates?')">
-
-                    Exam Schedule
-
-                </button>
+               
 
 
                 <button
@@ -1297,29 +1291,20 @@
             }
 
 
-            catch (error) {
+           catch (error) {
 
+    console.error(
+        "API Error:",
+        error
+    );
 
-                console.error(
-                    "API Error:",
-                    error
-                );
+    removeLoading();
 
-
-                removeLoading();
-
-
-                addErrorMessage(
-
-                    "Sorry, I could not connect to the assistant server.\n\n" +
-
-                    "Please make sure the FastAPI backend is running on:\n" +
-
-                    "http://127.0.0.1:8000"
-
-                );
-
-            }
+    addErrorMessage(
+        "Request failed:\n\n" +
+        error.message
+    );
+}
 
 
             /* =================================
