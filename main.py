@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from agent_core import ask_agent
@@ -20,9 +21,7 @@ class QueryResponse(BaseModel):
 
 @app.get("/")
 async def root():
-    return {
-        "message": "Syllabus & Exam Assistant API is running."
-    }
+    return FileResponse("index.html")
 
 
 @app.post("/chat", response_model=QueryResponse)
