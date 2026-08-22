@@ -465,6 +465,10 @@
             padding: 10px;
 
             color: #111827;
+
+            resize: none;
+
+            font-family: inherit;
         }
 
 
@@ -493,6 +497,8 @@
             font-size: 18px;
 
             transition: 0.2s;
+
+            flex-shrink: 0;
         }
 
 
@@ -782,12 +788,12 @@
             <div class="input-wrapper">
 
 
-                <input
-                    type="text"
+                <textarea
                     id="questionInput"
+                    rows="1"
                     placeholder="Ask something about your course..."
                     autocomplete="off"
-                >
+                ></textarea>
 
 
                 <button
@@ -805,7 +811,7 @@
 
             <div class="input-hint">
 
-                Press Enter to send your question
+                Press Enter to send, Shift + Enter for new line
 
             </div>
 
@@ -857,7 +863,7 @@
 
 
         /* ========================================
-           3. ENTER KEY
+           3. ENTER KEY & SHIFT+ENTER HANDLING
         ======================================== */
 
         questionInput.addEventListener(
@@ -866,9 +872,19 @@
 
                 if (event.key === "Enter") {
 
-                    event.preventDefault();
+                    if (event.shiftKey) {
 
-                    sendQuestion();
+                        // Shift + Enter: السماح بالسطر الجديد تلقائياً
+
+                    } else {
+
+                        // Enter فقط: منع السطر الجديد وإرسال السؤال
+
+                        event.preventDefault();
+
+                        sendQuestion();
+
+                    }
 
                 }
 
