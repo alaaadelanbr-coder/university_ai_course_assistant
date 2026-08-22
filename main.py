@@ -1,5 +1,9 @@
 from fastapi import FastAPI, HTTPException
+<<<<<<< HEAD
 from fastapi.middleware.cors import CORSMiddleware
+=======
+from fastapi.responses import FileResponse
+>>>>>>> ba041c04653ba851a92a81f226806fe352411e3a
 from pydantic import BaseModel
 
 from agent_core import ask_agent
@@ -30,9 +34,7 @@ class QueryResponse(BaseModel):
 
 @app.get("/")
 async def root():
-    return {
-        "message": "Syllabus & Exam Assistant API is running."
-    }
+    return FileResponse("index.html")
 
 
 @app.post("/chat", response_model=QueryResponse)
