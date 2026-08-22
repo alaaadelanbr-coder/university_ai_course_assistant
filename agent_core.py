@@ -1,5 +1,7 @@
 import os
 
+import re
+
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain.tools import tool
@@ -65,18 +67,15 @@ CONSTRAINTS:
 10. Keep responses clear, concise, and student-friendly.
 
 OUTPUT FORMAT:
-1. Answer directly and concisely.
+OUTPUT FORMAT:
+1. Answer directly and clearly.
 2. Use plain text only.
 3. Do not use Markdown.
 4. Do not use asterisks, hashtags, Markdown tables, or code blocks.
-5. For course details, use one item per line in this format:
-   Course Code: ...
-   Course Name: ...
-   Credit Hours: ...
-   Prerequisite: ...
-6. Use short paragraphs when needed.
-7. If information is missing from the course material, clearly state
-   that it was not found and advise the student to consult the TA or instructor.
+5. Use short labeled lines or bullet points when presenting multiple facts.
+6. For calculations, state the final result first.
+7. For schedules, present the schedule day by day.
+8. Keep responses concise unless more detail is requested.
 """
 
 
@@ -128,6 +127,14 @@ agent = create_agent(
     checkpointer=checkpointer,
 )
 
+def clean_response(text: str) -> str:
+    text = text.replace("**", "")
+    text = text.replace("__", "")
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
+    text = text.replace("\u00a0", " ")
+    text = text.replace("\u202f", " ")
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
 
 def ask_agent(message: str, session_id: str) -> str:
 
@@ -156,7 +163,7 @@ def ask_agent(message: str, session_id: str) -> str:
             config,
         )
 
-        return result["messages"][-1].content
+        return clean_response(result["messages"][-1].content)
 
     except Exception as exc:
         print(f"Agent error: {exc}")
